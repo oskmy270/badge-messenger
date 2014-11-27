@@ -5,16 +5,28 @@ import badge
 
 DEVICE = "/dev/ttyUSB0"
 badgeMessage = ''
+currentText = 'Starting'
 os.system("stty speed 38400 <" + DEVICE)
 while True:
 	print 'Now connecting to dropbox'
 	os.system("wget -q https://dl.dropboxusercontent.com/u/2082167/ledbadge.txt -N")
 	file = open("ledbadge.txt","r")
-	temp = file.read()
+	dropboxInfo = file.read()
 	file.close()
-	print 'Comparing messages', temp, badgeMessage
-	if temp != badgeMessage:
-		badgeMessage = temp
+	if dropboxInfo == 'news':
+		badgeMessage = 'Nyheter: '
+		os.system('python rssFetcher.py')
+		newsFile = open('news.txt','r')
+		badgeMessage = badgeMessage+newsFile.read()
+		newsFile.close()
+	else:
+		badgeMessage = dropboxInfo
+
+	print 'Comparing messages'
+	print 'Current:', currentText
+	print 'Wanted: ', badgeMessage
+
+	if currentText != badgeMessage:
 		print 'Now trying to write to badge, ', badgeMessage
 		#os.system("stty speed 38400 <" + DEVICE)
 		f = open(DEVICE, "w")
@@ -23,6 +35,7 @@ while True:
 			f.write(p.format())
 		f.flush()
 		f.close()
+		currentText = badgeMessage
 	print 'Now sleeping'
 	for i in range(0,10):
 		print '.',

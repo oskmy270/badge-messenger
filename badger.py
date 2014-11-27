@@ -5,17 +5,22 @@ DEVICE = "/dev/ttyUSB0"
 rssFeed = 'http://www.dn.se/nyheter/m/rss'
 def main():
 	currentMessage = 'Starting...'
-	writeToLed(currentMessage,'2')
+	writeToLed(currentMessage,'4')
 	time.sleep(2)
 	while True:
 		dropboxInfo = checkDropBox()
-		if dropboxInfo[0:3] == 'news'
-			wantedMessage = fetchRss(dropBoxInfo.split()[1])
+		if dropboxInfo[0:4].find('news') != -1:
+			print 'News detected'
+			print dropboxInfo
+			wantedMessage = 'Nyheter: '+fetchRss(dropboxInfo.split()[1])
 		else:
 			wantedMessage = dropboxInfo
-		if wantedMessage != currentMessage:
+		if wantedMessage == currentMessage:
+			print 'Nothing new...'
+		else:
 			writeToLed(wantedMessage,'4')
 			currentMessage = wantedMessage
+			
 		print 'Now sleeping'
 		for i in range(0,10):
 			print '.'
@@ -36,10 +41,11 @@ def checkDropBox():
 	file = open("ledbadge.txt","r")
 	dropboxInfo = file.read()
 	file.close()
+	return dropboxInfo
 	
 def fetchRss(feed):
 	if feed == 'http://www.dn.se/nyheter/m/rss':
-	os.system('wget '+feed+' -O rss')
+		os.system('wget '+feed+' -O rss')
 		f = open('rss','r')
 		for line in f:
 			temp = line.find('[CDATA')
@@ -52,3 +58,4 @@ def fetchRss(feed):
 		return 'Feed not supported'
 	
 	
+main()
