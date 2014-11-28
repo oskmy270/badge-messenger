@@ -1,4 +1,5 @@
 import os
+import random
 import time
 import badge
 DEVICE = "/dev/ttyUSB0"
@@ -44,7 +45,18 @@ def checkDropBox():
 	return dropboxInfo
 	
 def fetchRss(feed):
-	if feed == 'http://www.dn.se/nyheter/m/rss':
+	allFeeds=['http://www.dn.se/nyheter/m/rss','http://rss.cnn.com/rss/edition.rss','http://www.aljazeera.com/Services/Rss/?PostingId=2007731105943979989']
+	if feed == 'random':
+		print 'Random feed'
+		return fetchRss(allFeeds[random.randint(0,1)])
+	if feed == 'DN':
+		print 'DN'
+		return fetchRss(allFeeds[0])
+	if feed == 'Al-Jazeera':
+		print feed
+		return fetchRss(allFeeds[2])
+	elif feed == allFeeds[0]:
+		print 'Feed detected:',feed
 		os.system('wget '+feed+' -O rss')
 		f = open('rss','r')
 		for line in f:
@@ -55,16 +67,18 @@ def fetchRss(feed):
 					return 'DN: '+message
 		f.close()
 	
-	elif feed == 'http://rss.cnn.com/rss/edition.rss':
+	elif feed == allFeeds[1]:
+		print 'Feed detected:', feed
 		os.system('wget '+feed+' -O rss')
 		f = open('rss','r')
 		for line in f:
 			temp = line.find('<title>')
-			if temp != -1:
-				message = line[temp+6:]
-				if message.find('CNN.com - Top Stories') == -1:
-					return 'CNN: '+message
+			if temp != -1 and line.find('CNN.com - Top Stories') == -1:
+				message = line.split('<')[1].split('>')[1]
+				print message
+				return 'CNN: '+message
 	else:
+		print 'Feed not supported:',feed
 		return 'Feed not supported'
 	
 	
