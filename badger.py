@@ -77,6 +77,16 @@ def fetchRss(feed):
 				message = line.split('<')[1].split('>')[1]
 				print message
 				return 'CNN: '+message
+	elif feed == allFeeds[2]:
+		print 'Feed detected:', feed
+		os.system('wget '+feed+' -O rss')
+		f = open('rss','r')
+		for line in f:
+			temp = line.find('<title>')
+			if temp != -1 and line.find('AJE') == -1:
+				message = line.split('<')[1].split('>')[1]
+				print message
+				return 'CNN: '+message
 	else:
 		print 'Feed not supported:',feed
 		return 'Feed not supported'
