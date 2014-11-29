@@ -46,9 +46,11 @@ def checkDropBox():
 	
 def fetchRss(feed):
 	allFeeds=['http://www.dn.se/nyheter/m/rss','http://rss.cnn.com/rss/edition.rss','http://www.aljazeera.com/Services/Rss/?PostingId=2007731105943979989']
+	feedTitle = random.randint(0,3)
+	print 'Looking for title number',feedTitle
 	if feed == 'random':
 		print 'Random feed'
-		return fetchRss(allFeeds[random.randint(0,1)])
+		return fetchRss(allFeeds[random.randint(0,2)])
 	if feed == 'DN':
 		print 'DN'
 		return fetchRss(allFeeds[0])
@@ -59,34 +61,46 @@ def fetchRss(feed):
 		print 'Feed detected:',feed
 		os.system('wget '+feed+' -O rss')
 		f = open('rss','r')
+		iterator = 0
 		for line in f:
 			temp = line.find('[CDATA')
 			if temp != -1 and line.find('<img') == -1:
 				message =  line[temp:].split('[')[2].split(']')[0]
 				if message.find('Nyheter - Nyheter') == -1:
-					return 'DN: '+message
+					if iterator == feedTitle:
+						return 'DN: '+message.replace('å','a').replace('ö','o').replace('ä','a')
+					else:
+						iterator += 1
 		f.close()
 	
 	elif feed == allFeeds[1]:
 		print 'Feed detected:', feed
 		os.system('wget '+feed+' -O rss')
 		f = open('rss','r')
+		iterator = 0
 		for line in f:
 			temp = line.find('<title>')
 			if temp != -1 and line.find('CNN.com - Top Stories') == -1:
 				message = line.split('<')[1].split('>')[1]
 				print message
-				return 'CNN: '+message
+				if iterator == feedTitle:
+					return 'CNN: '+message
+				else:
+					iterator += 1
 	elif feed == allFeeds[2]:
 		print 'Feed detected:', feed
 		os.system('wget '+feed+' -O rss')
 		f = open('rss','r')
+		iterator = 0
 		for line in f:
 			temp = line.find('<title>')
 			if temp != -1 and line.find('AJE') == -1:
 				message = line.split('<')[1].split('>')[1]
 				print message
-				return 'CNN: '+message
+				if iterator == feedTitle:
+					return 'Al-Jazeera: '+message
+				else:
+					iterator += 1
 	else:
 		print 'Feed not supported:',feed
 		return 'Feed not supported'
