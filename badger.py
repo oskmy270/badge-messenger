@@ -1,19 +1,25 @@
+#-*- coding: utf-8 -*-
 import os
 import random
 import time
 import badge
+
+
 DEVICE = "/dev/ttyUSB0"
 rssFeed = 'http://www.dn.se/nyheter/m/rss'
+timeToSleep = 20 #seconds
 def main():
 	currentMessage = 'Starting...'
 	writeToLed(currentMessage,'4')
 	time.sleep(2)
 	while True:
 		dropboxInfo = checkDropBox()
-		if dropboxInfo[0:4].find('news') != -1:
+		if len(dropboxInfo) == 0:
+			dropboxInfo = 'No info in file...'
+		if dropboxInfo[0:4].lower().find('news') != -1:
 			print 'News detected'
 			print dropboxInfo
-			wantedMessage = fetchRss(dropboxInfo.split()[1])
+			wantedMessage = fetchRss(dropboxInfo.split()[1].lower())
 		else:
 			wantedMessage = dropboxInfo
 		if wantedMessage == currentMessage:
@@ -23,11 +29,18 @@ def main():
 			currentMessage = wantedMessage
 			
 		print 'Now sleeping'
-		for i in range(0,10):
-			print '.'
+		for i in range(0,timeToSleep):
+			print timeToSleep-i
 			time.sleep(1)
 	print '.'
 def writeToLed(msg,spd):
+	maxTextLength = 70
+	if len(msg) == 0:
+		msg = '...'
+	if len(msg) > maxTextLength:
+		msg = msg[0:maxTextLength]
+		print 'Shortening text'
+	print len(msg), 'Writing this to led:', msg
 	os.system("stty speed 38400 <" + DEVICE)
 	f = open(DEVICE, "w")
 	pkts = badge.build_packets(0x600, badge.message_file(msg, speed=spd, action=badge.ACTION_ROTATE))
@@ -42,6 +55,7 @@ def checkDropBox():
 	file = open("ledbadge.txt","r")
 	dropboxInfo = file.read()
 	file.close()
+	print 'Read from dropbox:',dropboxInfo
 	return dropboxInfo
 	
 def fetchRss(feed):
@@ -51,7 +65,7 @@ def fetchRss(feed):
 	if feed == 'random':
 		print 'Random feed'
 		return fetchRss(allFeeds[random.randint(0,2)])
-	if feed == 'DN':
+	if feed == 'dn':
 		print 'DN'
 		return fetchRss(allFeeds[0])
 	if feed == 'Al-Jazeera':
@@ -63,14 +77,14 @@ def fetchRss(feed):
 		f = open('rss','r')
 		iterator = 0
 		for line in f:
-			temp = line.find('[CDATA')
-			if temp != -1 and line.find('<img') == -1:
+			#temp = line.find('[CDATA')
+			temp = line.find('<title>')
+			if temp != -1 and line.find('Nyheter - Nyheter') == -1:
 				message =  line[temp:].split('[')[2].split(']')[0]
-				if message.find('Nyheter - Nyheter') == -1:
-					if iterator == feedTitle:
-						return 'DN: '+message.replace('å','a').replace('ö','o').replace('ä','a')
-					else:
-						iterator += 1
+				if iterator == feedTitle:
+					return 'DN: '+message
+				else:
+					iterator += 1
 		f.close()
 	
 	elif feed == allFeeds[1]:
