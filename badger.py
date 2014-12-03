@@ -8,18 +8,24 @@ import badge
 DEVICE = "/dev/ttyUSB0"
 rssFeed = 'http://www.dn.se/nyheter/m/rss'
 timeToSleep = 20 #seconds
+dropBoxUserWeather = 'https://dl.dropboxusercontent.com/u/2082167/'
+dropBoxUser = 'https://dl.dropboxusercontent.com/u/2082167/'
 def main():
 	currentMessage = 'Starting...'
 	writeToLed(currentMessage,'4')
 	time.sleep(2)
 	while True:
-		dropboxInfo = checkDropBox()
+		dropboxInfo = checkDropBox(dropBoxUser,'ledbadge.txt')
 		if len(dropboxInfo) == 0:
 			dropboxInfo = 'No info in file...'
 		if dropboxInfo[0:4].lower().find('news') != -1:
 			print 'News detected'
 			print dropboxInfo
 			wantedMessage = fetchRss(dropboxInfo.split()[1].lower())
+		elif dropboxInfo.lower() == 'weather':
+			print 'Weather detected'
+			print dropboxInfo
+			wantedMessage = checkDropBox(dropBoxUserWeather,'weather.txt')
 		else:
 			wantedMessage = dropboxInfo
 		if wantedMessage == currentMessage:
@@ -33,8 +39,9 @@ def main():
 			print timeToSleep-i
 			time.sleep(1)
 	print '.'
+
 def writeToLed(msg,spd):
-	maxTextLength = 70
+	maxTextLength = 150
 	if len(msg) == 0:
 		msg = '...'
 	if len(msg) > maxTextLength:
@@ -49,10 +56,10 @@ def writeToLed(msg,spd):
 	f.flush()
 	f.close()
 
-def checkDropBox():
+def checkDropBox(url,file):
 	print 'Now connecting to dropbox'
-	os.system("wget -q https://dl.dropboxusercontent.com/u/2082167/ledbadge.txt -N")
-	file = open("ledbadge.txt","r")
+	os.system("wget -q "+url+file+" -N") #https://dl.dropboxusercontent.com/u/2082167/ledbadge.txt -N")
+	file = open(file,"r")
 	dropboxInfo = file.read()
 	file.close()
 	print 'Read from dropbox:',dropboxInfo
@@ -65,6 +72,9 @@ def fetchRss(feed):
 	if feed == 'random':
 		print 'Random feed'
 		return fetchRss(allFeeds[random.randint(0,2)])
+	if feed == 'cnn':
+		print 'CNN'
+		return fetchRss(allFeeds[1])
 	if feed == 'dn':
 		print 'DN'
 		return fetchRss(allFeeds[0])
