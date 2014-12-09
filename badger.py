@@ -27,6 +27,9 @@ def main():
 			print dropboxInfo
 			wantedMessage = 'IP: '+str(os.popen("ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'").read()).strip()
 			print 'wantedMessage:',wantedMessage
+		elif dropboxInfo.lower() == 'update':
+			print 'Update triggered'
+			wantedMessage = updateGit()
 		elif dropboxInfo.lower() == 'weather':
 			print 'Weather detected'
 			print dropboxInfo
@@ -45,6 +48,8 @@ def main():
 			time.sleep(1)
 	print '.'
 
+def updateGit():
+	return os.popen('git pull').read().strip()
 def writeToLed(msg,spd):
 	maxTextLength = 150
 	if len(msg) == 0:
