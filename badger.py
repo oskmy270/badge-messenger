@@ -1,4 +1,5 @@
 #-*- coding: utf-8 -*-
+import git
 import os
 import random
 import time
@@ -49,7 +50,7 @@ def main():
 	print '.'
 
 def updateGit():
-	return os.popen('git pull').read().strip()
+	return os.popen('cd badge-messenger && git pull').read().strip()
 	
 def writeToLed(msg,spd):
 	maxTextLength = 150
