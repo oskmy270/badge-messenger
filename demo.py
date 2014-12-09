@@ -5,7 +5,7 @@ import time
 import badge
 
 DEVICE = "/dev/ttyUSB0"
-badgeMessage = "Hello world"
+badgeMessage = "150.132.109.74"
 # L = [216, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100]
 # badgeMessage = ''.join(chr(i) for i in L)
 os.system("stty speed 38400 <" + DEVICE)

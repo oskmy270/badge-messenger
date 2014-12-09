@@ -17,11 +17,16 @@ def main():
 	while True:
 		dropboxInfo = checkDropBox(dropBoxUser,'ledbadge.txt')
 		if len(dropboxInfo) == 0:
-			dropboxInfo = 'No info in file...'
+			dropboxInfo = ' '
 		if dropboxInfo[0:4].lower().find('news') != -1:
 			print 'News detected'
 			print dropboxInfo
 			wantedMessage = fetchRss(dropboxInfo.split()[1].lower())
+		elif dropboxInfo.lower() == 'ip':
+			print 'IP detected'
+			print dropboxInfo
+			wantedMessage = 'IP: '+str(os.popen("ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'").read()).strip()
+			print 'wantedMessage:',wantedMessage
 		elif dropboxInfo.lower() == 'weather':
 			print 'Weather detected'
 			print dropboxInfo
