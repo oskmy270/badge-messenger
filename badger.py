@@ -31,7 +31,9 @@ def main():
 			print 'wantedMessage:',wantedMessage
 		elif dropboxInfo.lower() == 'update':
 			print 'Update triggered'
-			wantedMessage = updateGit()
+			tempText = updateGit()
+			print 'Return from update prompt:', tempText
+			wantedMessage = 'Tried update'
 		elif dropboxInfo.lower() == 'weather':
 			print 'Weather detected'
 			print dropboxInfo
@@ -57,7 +59,7 @@ def main():
 	print '.'
 
 def updateGit():
-	return os.popen('cd home/pi/badge-messenger/ && git pull').read().strip()
+	return os.popen('python /home/pi/gitUpdate.py').read().strip()
 	
 def writeToLed(msg,spd):
 	maxTextLength = 150
