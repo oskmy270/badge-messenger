@@ -33,7 +33,10 @@ def main():
 			print 'Update triggered'
 			tempText = updateGit()
 			print 'Return from update prompt:', tempText
-			wantedMessage = 'Tried update'
+			if tempText.find('Already up-to-date') != -1:
+				wantedMessage = 'Nothing new to update'
+			elif tempText.find('Updating') != -1:
+				wantedMessage = 'Update complete'
 		elif dropboxInfo.lower() == 'weather':
 			print 'Weather detected'
 			print dropboxInfo
