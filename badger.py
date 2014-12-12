@@ -50,6 +50,7 @@ def main():
 
 def updateGit():
 	return os.popen('git pull').read().strip()
+	
 def writeToLed(msg,spd):
 	maxTextLength = 150
 	if len(msg) == 0:
