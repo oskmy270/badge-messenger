@@ -18,7 +18,7 @@ def main():
 		dropboxInfo = checkDropBox(dropBoxUser,'ledbadge.txt')
 		if len(dropboxInfo) == 0:
 			dropboxInfo = ' '
-		if dropboxInfo.lower().strip() == 'news':
+		elif dropboxInfo.lower().strip() == 'news':
 			wantedMessage = fetchRss('random')
 		elif dropboxInfo[0:4].lower().find('news') != -1 and len(dropboxInfo.split()) > 1:
 			print 'News detected'
@@ -38,6 +38,12 @@ def main():
 			wantedMessage = checkDropBox(dropBoxUserWeather,'weather.txt')
 		else:
 			wantedMessage = dropboxInfo
+		if wantedMessage.lower() == 'fix':
+			writeToLed('Trying to restore','4')
+			time.sleep(7)
+			writeToLed('Trying to restore, try to update dropbox file now.','4')
+			wantedMessage = 'Update dropbox file now'
+
 		if wantedMessage == currentMessage:
 			print 'Nothing new...'
 		else:
@@ -56,7 +62,7 @@ def updateGit():
 def writeToLed(msg,spd):
 	maxTextLength = 150
 	if len(msg) == 0:
-		msg = '...'
+		msg = '...nothing to write, try fix...or reboot...'
 	if len(msg) > maxTextLength:
 		msg = msg[0:maxTextLength]
 		print 'Shortening text'
