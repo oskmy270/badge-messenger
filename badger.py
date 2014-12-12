@@ -40,7 +40,7 @@ def main():
 			wantedMessage = checkDropBox(dropBoxUserWeather,'weather.txt')
 		else:
 			wantedMessage = dropboxInfo
-		if wantedMessage.lower() == 'fix': #Escape to try to restore
+		if wantedMessage.lower() == 'fix': #Escape to try to restore  
 			writeToLed('Trying to restore','4')
 			time.sleep(7)
 			writeToLed('Trying to restore, try to update dropbox file now.','4')
