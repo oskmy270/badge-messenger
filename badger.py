@@ -1,5 +1,4 @@
 #-*- coding: utf-8 -*-
-import git
 import os
 import random
 import time
@@ -19,7 +18,9 @@ def main():
 		dropboxInfo = checkDropBox(dropBoxUser,'ledbadge.txt')
 		if len(dropboxInfo) == 0:
 			dropboxInfo = ' '
-		if dropboxInfo[0:4].lower().find('news') != -1:
+		if dropboxInfo.lower().strip() == 'news':
+			wantedMessage = fetchRss('random')
+		elif dropboxInfo[0:4].lower().find('news') != -1 and len(dropboxInfo.split()) > 1:
 			print 'News detected'
 			print dropboxInfo
 			wantedMessage = fetchRss(dropboxInfo.split()[1].lower())
@@ -50,7 +51,7 @@ def main():
 	print '.'
 
 def updateGit():
-	return os.popen('cd badge-messenger && git pull').read().strip()
+	return os.popen('cd home/pi/badge-messenger/ && git pull').read().strip()
 	
 def writeToLed(msg,spd):
 	maxTextLength = 150
