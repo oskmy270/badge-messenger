@@ -37,7 +37,7 @@ def main():
 		elif dropboxInfo.lower() == 'weather':
 			print 'Weather detected'
 			print dropboxInfo
-			wantedMessage = checkDropBox(dropBoxUserWeather,'weather.txt')
+			wantedMessage = checkDropBox(dropBoxUserWeather,'weather.txt') #Weather
 		else:
 			wantedMessage = dropboxInfo
 		if wantedMessage.lower() == 'fix': #Escape to try to restore  
