@@ -25,7 +25,7 @@ def main():
 			print 'News detected'
 			print dropboxInfo
 			wantedMessage = fetchRss(dropboxInfo.split()[1].lower())
-		elif dropboxInfo.lower() == 'ip':
+		elif dropboxInfo.lower() == 'ip': #test
 			print 'IP detected'
 			print dropboxInfo
 			wantedMessage = 'IP: '+str(os.popen("ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'").read()).strip()
