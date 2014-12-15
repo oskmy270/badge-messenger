@@ -30,7 +30,7 @@ def main():
 			print dropboxInfo
 			#tempIP = str(os.popen("ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'").read()).strip()
 			tempIP = str(os.popen("ifconfig eth0 | grep 'inet addr:'").read()).strip()
-			wantedMessage = 'IP: '+tempIP
+			wantedMessage = 'IP is: '+tempIP
 			print 'wantedMessage:',wantedMessage
 		elif dropboxInfo.lower() == 'update':
 			print 'Update triggered'
