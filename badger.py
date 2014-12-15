@@ -10,7 +10,7 @@ rssFeed = 'http://www.dn.se/nyheter/m/rss'
 timeToSleep = 20 #seconds
 dropBoxUserWeather = 'https://dl.dropboxusercontent.com/u/2082167/'
 dropBoxUser = 'https://dl.dropboxusercontent.com/u/2082167/'
-#Made by Oskar Myrberg
+#Made by Oskar Myrberg 2014
 def main():
 	currentMessage = 'Starting...'
 	writeToLed(currentMessage,'4')
