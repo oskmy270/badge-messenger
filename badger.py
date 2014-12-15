@@ -28,8 +28,9 @@ def main():
 		elif dropboxInfo.lower() == 'ip': #test
 			print 'IP detected'
 			print dropboxInfo
-			#wantedMessage = 'IP: '+str(os.popen("ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'").read()).strip()
-			wantedMessage = 'IP: '+str(os.popen("ifconfig eth0 | grep 'inet addr:' | cut -d: -f2").read()).strip()
+			#tmepIP = str(os.popen("ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'").read()).strip()
+			tempIP = str(os.popen("ifconfig eth0 | grep 'inet addr:' | cut -d: -f2").read()).strip()
+			wantedMessage = 'IP: '+tempIP
 			print 'wantedMessage:',wantedMessage
 		elif dropboxInfo.lower() == 'update':
 			print 'Update triggered'
