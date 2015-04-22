@@ -14,7 +14,7 @@ dropBoxUserWeather = 'https://dl.dropboxusercontent.com/u/2082167/'
 dropBoxUser = 'https://dl.dropboxusercontent.com/u/2082167/' #Oskar
 #Made by Oskar Myrberg 2014-2015
 def main():
-	currentMessage = 'Starting...'
+	currentMessage = 'Initializing...'
 	writeToLed(currentMessage,'4')
 	time.sleep(2)
 	#print os.popen(teliaConnectString)
