@@ -6,15 +6,18 @@ import badge
 
 
 DEVICE = "/dev/ttyUSB0"
+#teliaConnectString = "sudo /usr/bin/modem3g/sakis3g connect"
 rssFeed = 'http://www.dn.se/nyheter/m/rss'
 timeToSleep = 20 #seconds
 dropBoxUserWeather = 'https://dl.dropboxusercontent.com/u/2082167/'
+dropBoxUser = 'https://dl.dropboxusercontent.com/u/3880881/'
 dropBoxUser = 'https://dl.dropboxusercontent.com/u/2082167/'
-#Made by Oskar Myrberg 2014
+#Made by Oskar Myrberg 2014-2015
 def main():
-	currentMessage = 'Starting...'
+	currentMessage = 'Starting...connecting to USB Modem'
 	writeToLed(currentMessage,'4')
 	time.sleep(2)
+	#print os.popen(teliaConnectString)
 	while True:
 		dropboxInfo = checkDropBox(dropBoxUser,'ledbadge.txt')
 		if len(dropboxInfo) == 0:
@@ -29,7 +32,7 @@ def main():
 			print 'IP detected'
 			print dropboxInfo
 			#tempIP = str(os.popen("ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'").read()).strip()
-			tempIP = str(os.popen("ifconfig eth0 | grep 'inet addr:'").read()).strip()
+			tempIP = str(os.popen("ifconfig eth0 | grep 'inet addr:'").read())
 			wantedMessage = 'IP is: '+tempIP
 			print 'wantedMessage:',wantedMessage
 		elif dropboxInfo.lower() == 'update':
