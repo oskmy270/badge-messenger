@@ -3,7 +3,7 @@ import sys
 
 import badge
 
-DEVICE = "/dev/ttyUSB1"
+DEVICE = "/dev/ttyUSB0"
 
 os.system("stty speed 38400 <" + DEVICE)
 f = open(DEVICE, "w")

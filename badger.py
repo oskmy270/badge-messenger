@@ -6,18 +6,20 @@ import badge
 
 
 DEVICE = "/dev/ttyUSB0"
-#teliaConnectString = "sudo /usr/bin/modem3g/sakis3g connect"
+teliaConnectString = "sudo /usr/bin/modem3g/sakis3g connect"
 rssFeed = 'http://www.dn.se/nyheter/m/rss'
 timeToSleep = 20 #seconds
 dropBoxUserWeather = 'https://dl.dropboxusercontent.com/u/2082167/'
-dropBoxUser = 'https://dl.dropboxusercontent.com/u/3880881/' #Kare
-#dropBoxUser = 'https://dl.dropboxusercontent.com/u/2082167/' #Oskar
+#dropBoxUser = 'https://dl.dropboxusercontent.com/u/3880881/' #Kare
+dropBoxUser = 'https://dl.dropboxusercontent.com/u/2082167/' #Oskar
 #Made by Oskar Myrberg 2014-2015
 def main():
-	currentMessage = 'Initializing...'
+	currentMessage = 'Dialing modem...'
 	writeToLed(currentMessage,'4')
-	time.sleep(2)
-	#print os.popen(teliaConnectString)
+	time.sleep(1)
+	ans = os.popen(teliaConnectString)
+	print ans
+	writeToLed('Dialing complete','4')
 	while True:
 		dropboxInfo = checkDropBox(dropBoxUser,'ledbadge.txt')
 		if len(dropboxInfo) == 0:
